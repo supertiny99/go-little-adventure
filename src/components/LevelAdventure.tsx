@@ -93,9 +93,10 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
       }
     }
 
-    // 关卡 2, 3: 吃掉小白兔即胜利
-    if (level.id === 2 || level.id === 3) {
-      if (totalCaptured >= (level.targetCaptures || 1)) {
+    // 关卡 2, 3, 7, 8, 9, 10: 吃子手筋谜题（吃掉指定数量小白兔或下入正解点即通关）
+    if ([2, 3, 7, 8, 9, 10].includes(level.id)) {
+      const isSolutionMove = level.solutionMoves?.some(m => m.r === r && m.c === c);
+      if (totalCaptured >= (level.targetCaptures || 1) || isSolutionMove) {
         setTimeout(() => {
           setShowSuccess(true);
           onLevelComplete(level.id);
@@ -104,8 +105,8 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
       }
     }
 
-    // 关卡 4: 手拉手连通
-    if (level.id === 4) {
+    // 关卡 4 (手拉手) & 关卡 11 (扣上大草帽封锁): 下在目标位置即获胜
+    if (level.id === 4 || level.id === 11) {
       if (level.solutionMoves?.some(m => m.r === r && m.c === c)) {
         setTimeout(() => {
           setShowSuccess(true);
@@ -126,9 +127,10 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
       }
     }
 
-    // 关卡 6: 完整 5x5 对弈
-    if (level.id === 6) {
-      if (totalCaptured >= (level.targetCaptures || 1)) {
+    // 关卡 6 (5x5 实战) & 关卡 12 (7x7 终极决战)
+    if (level.id === 6 || level.id === 12) {
+      const required = level.targetCaptures || (level.id === 12 ? 2 : 1);
+      if (totalCaptured >= required) {
         setTimeout(() => {
           setShowSuccess(true);
           onLevelComplete(level.id);
@@ -138,10 +140,11 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
 
       // 轮到 AI 落子
       setIsAiThinking(true);
-      setMessage('小白兔正在思考中...');
+      setMessage(level.id === 12 ? '机灵小狐狸正在思考中...' : '小白兔正在思考中...');
 
+      const aiDiff = level.id === 12 ? 'medium' : 'easy';
       setTimeout(() => {
-        const aiDecision = getAiMove(newBoard, 'white', 'easy');
+        const aiDecision = getAiMove(newBoard, 'white', aiDiff);
         if (aiDecision.point) {
           const aiRes = playMove(newBoard, aiDecision.point.r, aiDecision.point.c, 'white');
           if (aiRes.valid) {
@@ -152,7 +155,7 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
             if (aiRes.captured.length > 0) {
               sounds.playCapture();
               sounds.playWarning();
-              setMessage('哎呀，小黑猫被白兔抓走了一只，快反击！');
+              setMessage('哎呀，小黑猫被抓走了一只，快反击！');
             } else {
               setMessage(aiDecision.comment);
             }
