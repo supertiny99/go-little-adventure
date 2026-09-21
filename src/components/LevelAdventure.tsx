@@ -93,8 +93,47 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
       }
     }
 
-    // 关卡 2, 3, 7, 8, 9, 10: 吃子手筋谜题（吃掉指定数量小白兔或下入正解点即通关）
-    if ([2, 3, 7, 8, 9, 10].includes(level.id)) {
+    // 关卡 9: 小羊扭头·连环征子 (Ladder 动态互动)
+    if (level.id === 9) {
+      if (r === 1 && c === 3) {
+        setMessage('拐得漂亮！小白兔企图往右逃，快在侧面(3,4)反向打吃！');
+        voice.speak('拐得漂亮！快在侧面反向打吃！');
+        setIsAiThinking(true);
+        setTimeout(() => {
+          const aiRes = playMove(newBoard, 2, 3, 'white');
+          if (aiRes.valid) {
+            sounds.playStone();
+            setBoard(aiRes.newBoard);
+            setLastMove({ r: 2, c: 3 });
+          }
+          setIsAiThinking(false);
+        }, 500);
+        return;
+      } else if (r === 3 && c === 4) {
+        setMessage('太绝啦！小羊扭头走投无路，下在(4,3)把它一网打尽！');
+        voice.speak('太绝啦！最后一步把它一网打尽！');
+        setIsAiThinking(true);
+        setTimeout(() => {
+          const aiRes = playMove(newBoard, 3, 3, 'white');
+          if (aiRes.valid) {
+            sounds.playStone();
+            setBoard(aiRes.newBoard);
+            setLastMove({ r: 3, c: 3 });
+          }
+          setIsAiThinking(false);
+        }, 500);
+        return;
+      } else if ((r === 4 && c === 3) || totalCaptured >= 1) {
+        setTimeout(() => {
+          setShowSuccess(true);
+          onLevelComplete(level.id);
+        }, 600);
+        return;
+      }
+    }
+
+    // 关卡 2, 3, 7, 8, 10, 11: 吃子手筋谜题（吃掉指定数量小白兔或下入正解点即通关）
+    if ([2, 3, 7, 8, 10, 11].includes(level.id)) {
       const isSolutionMove = level.solutionMoves?.some(m => m.r === r && m.c === c);
       if (totalCaptured >= (level.targetCaptures || 1) || isSolutionMove) {
         setTimeout(() => {
@@ -105,8 +144,8 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
       }
     }
 
-    // 关卡 4 (手拉手) & 关卡 11 (扣上大草帽封锁): 下在目标位置即获胜
-    if (level.id === 4 || level.id === 11) {
+    // 关卡 4 (手拉手) & 关卡 12 (扣上大草帽封锁): 下在目标位置即获胜
+    if (level.id === 4 || level.id === 12) {
       if (level.solutionMoves?.some(m => m.r === r && m.c === c)) {
         setTimeout(() => {
           setShowSuccess(true);
@@ -127,9 +166,9 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
       }
     }
 
-    // 关卡 6 (5x5 实战) & 关卡 12 (7x7 终极决战)
-    if (level.id === 6 || level.id === 12) {
-      const required = level.targetCaptures || (level.id === 12 ? 2 : 1);
+    // 关卡 6 (5x5 实战) & 关卡 13 (7x7 终极决战)
+    if (level.id === 6 || level.id === 13) {
+      const required = level.targetCaptures || (level.id === 13 ? 2 : 1);
       if (totalCaptured >= required) {
         setTimeout(() => {
           setShowSuccess(true);
@@ -140,9 +179,9 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
 
       // 轮到 AI 落子
       setIsAiThinking(true);
-      setMessage(level.id === 12 ? '机灵小狐狸正在思考中...' : '小白兔正在思考中...');
+      setMessage(level.id === 13 ? '机灵小狐狸正在思考中...' : '小白兔正在思考中...');
 
-      const aiDiff = level.id === 12 ? 'medium' : 'easy';
+      const aiDiff = level.id === 13 ? 'medium' : 'easy';
       setTimeout(() => {
         const aiDecision = getAiMove(newBoard, 'white', aiDiff);
         if (aiDecision.point) {

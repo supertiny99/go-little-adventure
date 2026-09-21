@@ -215,6 +215,29 @@ export const LEVELS: Level[] = [
   {
     id: 9,
     chapter: 2,
+    title: '小羊扭头·连环征子',
+    badge: '🚂',
+    boardSize: 7,
+    playerColor: 'black',
+    story: '小白兔被抱吃后硬要逃跑救自己！聪明的小黑猫像开过山车一样，它往哪跑我们就往侧面拐弯打吃！看它像小羊扭头一样逃不出五指山，最后一口气吃掉一整列白兔小火车！',
+    voiceText: '小兔子硬要逃跑，像开小火车一样连续拐弯打吃它！',
+    goal: '连续拐弯打吃，一举提掉整串白兔',
+    hint: '它往右跑你往上拐(1,3)，它往下跑你往右盖(3,4)，最后一步吃掉整串！',
+    targetCaptures: 3,
+    solutionMoves: [{ r: 1, c: 3 }, { r: 3, c: 4 }, { r: 4, c: 3 }],
+    setup: () => {
+      const b = createEmptyBoard(7);
+      b[2][1] = 'black';
+      b[3][2] = 'black';
+      b[1][2] = 'black';
+      b[2][4] = 'black'; // 挡住右侧，逼白兔往右下之字形拐弯
+      b[2][2] = 'white'; // 企图强行逃跑的白兔（初始剩2,3一口气）
+      return b;
+    },
+  },
+  {
+    id: 10,
+    chapter: 2,
     title: '一箭双雕·双打吃',
     badge: '🎯',
     boardSize: 5,
@@ -241,7 +264,7 @@ export const LEVELS: Level[] = [
     },
   },
   {
-    id: 10,
+    id: 11,
     chapter: 2,
     title: '先下手为强·反提救猫',
     badge: '⚡',
@@ -264,13 +287,11 @@ export const LEVELS: Level[] = [
       b[1][2] = 'white';
       b[0][2] = 'black'; // 白兔头顶有黑
       b[1][3] = 'black'; // 白兔右侧有黑
-      // 此时白兔 (1, 2) 只有 (1, 1) 一口气！
-      // 黑棋下在 (1, 1)，提掉 (1, 2)，解除 (2, 2) 危机并吃子！
       return b;
     },
   },
   {
-    id: 11,
+    id: 12,
     chapter: 2,
     title: '扣上大草帽·镇头封锁',
     badge: '👒',
@@ -290,7 +311,7 @@ export const LEVELS: Level[] = [
     },
   },
   {
-    id: 12,
+    id: 13,
     chapter: 2,
     title: '终极大决战·7x7森林之王',
     badge: '👑',
@@ -299,7 +320,7 @@ export const LEVELS: Level[] = [
     story: '恭喜你！你已经掌握了全部围棋吃子小神技！现在来到辽阔的 7×7 森林，与机灵小狐狸进行终极较量，率先吃掉 2 颗棋子即可登顶【围棋小萌主】！加油！',
     voiceText: '终极大决战开始啦！率先吃掉两颗棋子，登顶围棋小萌主！',
     goal: '在 7×7 实战中率先吃掉对方 2 颗子',
-    hint: '运用学到的门吃、抱吃与打吃绝招，步步为营！',
+    hint: '运用学到的门吃、抱吃、扭羊头绝招，步步为营！',
     targetCaptures: 2,
     setup: () => {
       return createEmptyBoard(7);
