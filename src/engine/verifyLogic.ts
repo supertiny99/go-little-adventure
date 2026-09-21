@@ -44,7 +44,7 @@ console.log('✅ 测试 3 通过：第 7 关【门吃】验证成功');
 // 测试 4：第 8 关抱吃
 const lvl8 = LEVELS.find(l => l.id === 8)!;
 const b8 = lvl8.setup();
-const res8 = playMove(b8, 2, 1, 'black');
+const res8 = playMove(b8, 2, 3, 'black');
 assert(res8.valid && res8.captured.length === 1, '第 8 关抱吃应吃掉白兔');
 console.log('✅ 测试 4 通过：第 8 关【抱吃】验证成功');
 
