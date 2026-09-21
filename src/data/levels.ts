@@ -32,7 +32,7 @@ export const CHAPTERS = [
 ];
 
 export const LEVELS: Level[] = [
-  // --- 第一章：呼吸与基础篇 ---
+  // ================= 第一章：呼吸与基础篇 =================
   {
     id: 1,
     chapter: 1,
@@ -52,7 +52,7 @@ export const LEVELS: Level[] = [
     ],
     setup: () => {
       const b = createEmptyBoard(3);
-      b[1][1] = 'white';
+      b[1][1] = 'white'; // 初始 4 气，合规
       return b;
     },
   },
@@ -71,10 +71,10 @@ export const LEVELS: Level[] = [
     solutionMoves: [{ r: 1, c: 2 }],
     setup: () => {
       const b = createEmptyBoard(3);
-      b[1][1] = 'white'; // 目标在中间
-      b[0][1] = 'black'; // 上
-      b[2][1] = 'black'; // 下
-      b[1][0] = 'black'; // 左
+      b[1][1] = 'white'; // 仅剩 (1, 2) 1气，合规
+      b[0][1] = 'black';
+      b[2][1] = 'black';
+      b[1][0] = 'black';
       return b;
     },
   },
@@ -93,8 +93,8 @@ export const LEVELS: Level[] = [
     solutionMoves: [{ r: 1, c: 0 }],
     setup: () => {
       const b = createEmptyBoard(3);
-      b[0][0] = 'white'; // 角落小白兔
-      b[0][1] = 'black'; // 右边已堵
+      b[0][0] = 'white'; // 角落白兔，剩 (1, 0) 1气，合规
+      b[0][1] = 'black';
       return b;
     },
   },
@@ -115,8 +115,8 @@ export const LEVELS: Level[] = [
     ],
     setup: () => {
       const b = createEmptyBoard(5);
-      b[2][2] = 'black'; // 居中黑猫
-      b[2][1] = 'white'; // 左右被白兔挤住
+      b[2][2] = 'black'; // 居中黑猫，有上下2气，合规
+      b[2][1] = 'white';
       b[2][3] = 'white';
       return b;
     },
@@ -134,6 +134,7 @@ export const LEVELS: Level[] = [
     hint: '不要点被完全包围的中心点(2,2)，选择周围宽阔安全的地方落子！',
     setup: () => {
       const b = createEmptyBoard(5);
+      // 白棋围成十字圈，但外侧全有气
       b[1][2] = 'white';
       b[3][2] = 'white';
       b[2][1] = 'white';
@@ -158,7 +159,7 @@ export const LEVELS: Level[] = [
     },
   },
 
-  // --- 第二章：吃子小神技篇 ---
+  // ================= 第二章：吃子小神技篇 =================
   {
     id: 7,
     chapter: 2,
@@ -166,21 +167,20 @@ export const LEVELS: Level[] = [
     badge: '🚪',
     boardSize: 5,
     playerColor: 'black',
-    story: '两只小黑猫已经在左右两侧站好了，就像胡同的两堵墙！小白兔正急匆匆往胡同口逃跑。小黑猫快在它的正前方把大门关上（门吃），把它捉拿归案！',
+    story: '两只小黑猫已经在左右两侧站好了，就像胡同两侧结实的门柱！小白兔正急匆匆往胡同口逃跑。小黑猫快在正前方的两扇门柱之间落下一子（门吃），把大门紧紧关死！',
     voiceText: '小白兔想从胡同口溜出去，快在正前方把大门关上，门吃胜利！',
-    goal: '使用【门吃】在正前方关门捉兔',
-    hint: '下在小白兔正前方的出口(1,2)，关上胡同大门！',
+    goal: '在胡同口下子完成【门吃】',
+    hint: '下在小白兔正前方的出口(1,2)，如同关上大门，瓮中捉兔！',
     targetCaptures: 1,
     solutionMoves: [{ r: 1, c: 2 }],
     setup: () => {
       const b = createEmptyBoard(5);
-      b[2][2] = 'white'; // 中间企图逃跑的小白兔
-      b[3][2] = 'black'; // 后方黑猫封路
-      b[1][1] = 'black'; // 左门框
-      b[2][1] = 'black';
-      b[1][3] = 'black'; // 右门框
-      b[2][3] = 'black';
-      // 唯一出口正前方 (1, 2)
+      b[2][2] = 'white'; // 企图逃跑的小白兔，仅剩 (1, 2) 这一口气！
+      b[3][2] = 'black'; // 后方堵住
+      b[2][1] = 'black'; // 左侧墙
+      b[2][3] = 'black'; // 右侧墙
+      b[1][1] = 'black'; // 左门柱
+      b[1][3] = 'black'; // 右门柱
       return b;
     },
   },
@@ -191,19 +191,20 @@ export const LEVELS: Level[] = [
     badge: '🤗',
     boardSize: 5,
     playerColor: 'black',
-    story: '小白兔快被逼到绝境了，它想往左边溜走。小黑猫不要直接追在屁股后面，而是从左侧迎上去给它一个大拥抱（抱吃），直接把它抱进包围圈里！',
+    story: '小白兔被逼到了转角，它正想往左边的大路逃跑。小黑猫从它逃跑的方向迎面迎上去，像张开双臂一样给它一个温暖的大拥抱（抱吃），把它拥入怀中！',
     voiceText: '从侧面迎上去给它一个大拥抱，抱吃成功！',
-    goal: '使用【抱吃】封住逃跑侧翼并吃子',
-    hint: '落在小白兔逃跑的侧面(2,1)，张开双臂抱住它！',
+    goal: '使用【抱吃】封住逃跑路线并吃子',
+    hint: '落在小白兔逃跑的必经之路(2,1)，张开双臂抱吃成功！',
     targetCaptures: 1,
     solutionMoves: [{ r: 2, c: 1 }],
     setup: () => {
       const b = createEmptyBoard(5);
-      b[2][2] = 'white'; // 目标白兔
-      b[1][2] = 'black'; // 上方有黑猫
-      b[3][2] = 'black'; // 下方有黑猫
-      b[2][3] = 'black'; // 右方有黑猫
-      // 唯一出口在左侧 (2, 1)
+      b[2][2] = 'white'; // 受困白兔，仅剩左侧 (2, 1) 一口气！
+      b[1][2] = 'black'; // 上堵
+      b[3][2] = 'black'; // 下堵
+      b[2][3] = 'black'; // 右堵
+      b[1][1] = 'black'; // 怀抱左上臂
+      b[3][1] = 'black'; // 怀抱左下臂
       return b;
     },
   },
@@ -214,24 +215,24 @@ export const LEVELS: Level[] = [
     badge: '🎯',
     boardSize: 5,
     playerColor: 'black',
-    story: '仔细瞧！这里有两只贪玩的小白兔，每只都只剩最后 2 扇门。神奇的小黑猫只要落下一子在中间，就能同时叫吃两只兔子！这就是传说中的【双打吃】！',
-    voiceText: '看准正中间的位置，一箭双雕，同时抓住两只兔子的小尾巴！',
-    goal: '落下一子同时打吃两只白兔',
-    hint: '点击正中间(2,2)的十字路口，同时给两边的白兔带来致命威胁！',
+    story: '看！左边的小白兔有两扇门，右边的小白兔也有两扇门！小黑猫只要落下一子在正中间，就能同时抓住它们俩的尾巴！这就是【双打吃】神技，让它们顾前不顾后！',
+    voiceText: '看准正中间的位置，一箭双雕，同时给两只兔子带来危机！',
+    goal: '落下一子同时打吃两边的白兔',
+    hint: '点击正中间(2,2)的十字路口，让两边的白兔同时只剩一口气！',
     solutionMoves: [{ r: 2, c: 2 }],
     setup: () => {
       const b = createEmptyBoard(5);
-      // 左白兔 (2, 1)
+      // 白兔 A 位于 (2, 1)，拥有 (1, 1) 和 (2, 2) 整整两口气！绝非死子！
       b[2][1] = 'white';
-      b[1][1] = 'black';
-      b[3][1] = 'black';
       b[2][0] = 'black';
-      // 右白兔 (2, 3)
-      b[2][3] = 'white';
+      b[3][1] = 'black';
+
+      // 白兔 B 位于 (1, 2)，拥有 (1, 1) 和 (2, 2) 整整两口气！绝非死子！
+      b[1][2] = 'white';
+      b[0][2] = 'black';
       b[1][3] = 'black';
-      b[3][3] = 'black';
-      b[2][4] = 'black';
-      // 共同唯一气口在中间 (2, 2)
+
+      // 中间 (2, 2) 是它们俩共同的关键门！黑棋落在 (2, 2) 实现纯正双打吃！
       return b;
     },
   },
@@ -242,23 +243,25 @@ export const LEVELS: Level[] = [
     badge: '⚡',
     boardSize: 5,
     playerColor: 'black',
-    story: '不好了！中间的小黑猫被包围，只剩最后一口气（被打吃）！但请擦亮眼睛：包围它的其中一只白兔也只剩一口气！快先下手吃掉白兔，小黑猫就立刻安全啦！',
+    story: '糟糕！中间的小黑猫被包围，只剩最后一口气！但别慌张，仔细看紧挨着它的那只白兔也只剩最后一口气！先下手吃掉白兔，小黑猫就立刻安全啦！',
     voiceText: '别慌张！敌人也只剩一口气了，先下手为强，救出小黑猫！',
-    goal: '吃掉危险的白兔，成功反提解救小黑猫',
-    hint: '找到只有一口气的白兔(2,3)，落在(1,3)先吃掉它！',
+    goal: '先下手吃掉虚弱白兔，反提成功解救小黑猫',
+    hint: '落在(1,1)，率先吃掉上方只有一口气的白兔(1,2)！',
     targetCaptures: 1,
-    solutionMoves: [{ r: 1, c: 3 }],
+    solutionMoves: [{ r: 1, c: 1 }],
     setup: () => {
       const b = createEmptyBoard(5);
-      b[2][2] = 'black'; // 陷入危险的小黑猫
+      // 小黑猫在 (2, 2)，拥有右侧 (2, 3) 这一口气！【绝非 0 气死子，有 1 气被打吃】
+      b[2][2] = 'black';
+      b[3][2] = 'white'; // 下方白
+      b[2][1] = 'white'; // 左方白
+
+      // 上方白兔在 (1, 2)，自身也只剩下左侧 (1, 1) 这一口气！
       b[1][2] = 'white';
-      b[3][2] = 'white';
-      b[2][1] = 'white';
-      // 右侧白兔 (2, 3) 自身也很脆弱
-      b[2][3] = 'white';
-      b[3][3] = 'black';
-      b[2][4] = 'black';
-      // 白兔在 (1, 3) 是它最后一口气！黑棋下在此处即可先提掉 (2, 3)
+      b[0][2] = 'black'; // 白兔头顶有黑
+      b[1][3] = 'black'; // 白兔右侧有黑
+      // 此时白兔 (1, 2) 只有 (1, 1) 一口气！
+      // 黑棋下在 (1, 1)，提掉 (1, 2)，解除 (2, 2) 危机并吃子！
       return b;
     },
   },
@@ -269,17 +272,16 @@ export const LEVELS: Level[] = [
     badge: '👒',
     boardSize: 5,
     playerColor: 'black',
-    story: '小白兔探出小脑袋，正一步步想往大路狂奔！我们在它正前方空一格的位置（天元），像扣大草帽一样落下一子，居高临下封锁它的逃跑路线！',
+    story: '小白兔探出小脑袋，想顺着大路往上冲！我们在它正前方空一格的天元中心，像扣上一顶大草帽一样落下一子（镇头），阻断它的逃跑路线！',
     voiceText: '给小白兔扣上一顶大草帽，阻挡它的逃跑路线！',
     goal: '在正前方落子实现【镇头封锁】',
     hint: '点击小白兔正前方空一格的天元中心(2,2)，盖上大帽子！',
     solutionMoves: [{ r: 2, c: 2 }],
     setup: () => {
       const b = createEmptyBoard(5);
-      b[4][2] = 'white'; // 底部小兔
+      b[4][2] = 'white'; // 底部小兔，拥有 (3, 2) 等多气，合规
       b[4][1] = 'black';
       b[4][3] = 'black';
-      // 正前方天元 (2, 2) 镇头
       return b;
     },
   },

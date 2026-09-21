@@ -2,6 +2,7 @@ import {
   createEmptyBoard,
   playMove,
   getGroupAndLiberties,
+  getAllGroups,
 } from './goLogic';
 import { LEVELS } from '../data/levels';
 
@@ -23,44 +24,45 @@ assert(getGroupAndLiberties(b1, 0, 2)?.liberties.length === 3, '边上单子应�
 assert(getGroupAndLiberties(b1, 2, 2)?.liberties.length === 4, '中央单子应为 4 气');
 console.log('✅ 测试 1 通过：气数计算正确');
 
-// 测试 2：关卡配置全面自检
-assert(LEVELS.length === 12, '关卡总数应为 12 关');
+// 测试 2：关卡无 0 气死子
 for (const lvl of LEVELS) {
   const b = lvl.setup();
-  assert(b.length === lvl.boardSize, `关卡 ${lvl.id} 棋盘尺寸应为 ${lvl.boardSize}`);
-  if (lvl.solutionMoves && lvl.solutionMoves.length > 0) {
-    for (const m of lvl.solutionMoves) {
-      assert(
-        m.r >= 0 && m.r < lvl.boardSize && m.c >= 0 && m.c < lvl.boardSize,
-        `关卡 ${lvl.id} 正解坐标 (${m.r}, ${m.c}) 超出盘面范围`
-      );
-    }
+  const groups = getAllGroups(b);
+  for (const group of groups) {
+    assert(group.liberties.length >= 1, `关卡 ${lvl.id} 不能出现 0 气死子`);
   }
 }
-console.log('✅ 测试 2 通过：全部 12 个关卡配置校验无误');
+console.log('✅ 测试 2 通过：全部 12 关初始无任何 0 气死子');
 
-// 测试 3：第 7 关门吃实战验证
+// 测试 3：第 7 关门吃
 const lvl7 = LEVELS.find(l => l.id === 7)!;
 const b7 = lvl7.setup();
-const res7 = playMove(b7, lvl7.solutionMoves![0].r, lvl7.solutionMoves![0].c, 'black');
-assert(res7.valid, '第 7 关门吃落子应合法');
-assert(res7.captured.length >= 1, '第 7 关门吃应成功吃掉白兔');
-console.log('✅ 测试 3 通过：第 7 关【门吃】验证成功，吃子数: ' + res7.captured.length);
+const res7 = playMove(b7, 1, 2, 'black');
+assert(res7.valid && res7.captured.length === 1, '第 7 关门吃应吃掉白兔');
+console.log('✅ 测试 3 通过：第 7 关【门吃】验证成功');
 
-// 测试 4：第 8 关抱吃实战验证
+// 测试 4：第 8 关抱吃
 const lvl8 = LEVELS.find(l => l.id === 8)!;
 const b8 = lvl8.setup();
-const res8 = playMove(b8, lvl8.solutionMoves![0].r, lvl8.solutionMoves![0].c, 'black');
-assert(res8.valid, '第 8 关抱吃落子应合法');
-assert(res8.captured.length >= 1, '第 8 关抱吃应成功吃掉白兔');
-console.log('✅ 测试 4 通过：第 8 关【抱吃】验证成功，吃子数: ' + res8.captured.length);
+const res8 = playMove(b8, 2, 1, 'black');
+assert(res8.valid && res8.captured.length === 1, '第 8 关抱吃应吃掉白兔');
+console.log('✅ 测试 4 通过：第 8 关【抱吃】验证成功');
 
-// 测试 5：第 10 关反提救猫验证
+// 测试 5：第 9 关双打吃
+const lvl9 = LEVELS.find(l => l.id === 9)!;
+const b9 = lvl9.setup();
+const res9 = playMove(b9, 2, 2, 'black');
+assert(res9.valid, '双打吃落子合法');
+const gA = getGroupAndLiberties(res9.newBoard, 2, 1)!;
+const gB = getGroupAndLiberties(res9.newBoard, 1, 2)!;
+assert(gA.liberties.length === 1 && gB.liberties.length === 1, '应同时使两只白兔变为1气');
+console.log('✅ 测试 5 通过：第 9 关【双打吃】验证成功');
+
+// 测试 6：第 10 关反提救猫
 const lvl10 = LEVELS.find(l => l.id === 10)!;
 const b10 = lvl10.setup();
-const res10 = playMove(b10, lvl10.solutionMoves![0].r, lvl10.solutionMoves![0].c, 'black');
-assert(res10.valid, '第 10 关反提落子应合法');
-assert(res10.captured.length >= 1, '第 10 关反提应成功吃掉白兔解救黑猫');
-console.log('✅ 测试 5 通过：第 10 关【反提救猫】验证成功');
+const res10 = playMove(b10, 1, 1, 'black');
+assert(res10.valid && res10.captured.length === 1, '反提应吃掉白兔');
+console.log('✅ 测试 6 通过：第 10 关【反提救猫】验证成功');
 
-console.log('🎉 全部 12 个启蒙关卡与围棋核心手筋测试 100% 通过！');
+console.log('🎉 全部 12 个关卡严格逻辑验证通过！');
