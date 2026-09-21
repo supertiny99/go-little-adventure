@@ -88,10 +88,10 @@ export const Piece: React.FC<PieceProps> = ({
           <line x1="88" y1="60" x2="74" y2="58" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
         </svg>
 
-        {/* 气数小气泡标牌 */}
+        {/* 气数小气泡标牌（精准贴合棋子右上角，绝不脱离飘移） */}
         {typeof liberties === 'number' && (
           <div
-            className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black shadow-md border-2 border-white ${
+            className={`absolute top-0 right-0 w-[30%] h-[30%] min-w-[14px] min-h-[14px] max-w-[22px] max-h-[22px] rounded-full flex items-center justify-center text-[10px] sm:text-xs font-black shadow-md border-2 border-white translate-x-1 -translate-y-1 ${
               isDanger ? 'bg-red-500 text-white animate-pulse' : 'bg-emerald-500 text-white'
             }`}
           >
@@ -198,10 +198,10 @@ export const Piece: React.FC<PieceProps> = ({
         <ellipse cx="74" cy="62" rx="7" ry="4" fill="#fbcfe8" />
       </svg>
 
-      {/* 气数小气泡标牌 */}
+      {/* 气数小气泡标牌（精准贴合棋子右上角，绝不脱离飘移） */}
       {typeof liberties === 'number' && (
         <div
-          className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black shadow-md border-2 border-white ${
+          className={`absolute top-0 right-0 w-[30%] h-[30%] min-w-[14px] min-h-[14px] max-w-[22px] max-h-[22px] rounded-full flex items-center justify-center text-[10px] sm:text-xs font-black shadow-md border-2 border-white translate-x-1 -translate-y-1 ${
             isDanger ? 'bg-red-500 text-white animate-pulse' : 'bg-emerald-500 text-white'
           }`}
         >

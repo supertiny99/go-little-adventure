@@ -72,7 +72,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     <div className="relative p-3 sm:p-5 bg-gradient-to-br from-amber-100 via-amber-200 to-amber-100 rounded-3xl shadow-2xl border-4 sm:border-8 border-amber-400 select-none w-full max-w-[92vw] sm:max-w-[460px] mx-auto aspect-square flex items-center justify-center">
       {/* 内部高精度正方形工作区 */}
       <div className="relative w-full h-full">
-        {/* --- 底层：SVG 完美精准网格线与星位（彻底根除接缝歪斜与不规则） --- */}
+        {/* --- 底层：SVG 完美精准网格线与星位 --- */}
         <svg
           viewBox={`0 0 ${VB_SIZE} ${VB_SIZE}`}
           className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-sm"
@@ -130,7 +130,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           })}
         </svg>
 
-        {/* --- 上层：交叉点交互与棋子绝对定位层（每个交叉点绝对独立，绝不挤压网格） --- */}
+        {/* --- 上层：交叉点交互与棋子绝对定位层（绝对重叠居中，彻底消除任何位置漂移） --- */}
         {board.map((row, r) =>
           row.map((cell, c) => {
             const key = `${r},${c}`;
@@ -155,27 +155,29 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   width: `${cellPercent}%`,
                   height: `${cellPercent}%`,
                 }}
-                className={`group absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center cursor-pointer transition-transform duration-100 ${
+                className={`group absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-100 ${
                   disabled ? 'cursor-not-allowed' : 'active:scale-95'
                 }`}
               >
-                {/* 棋子 */}
+                {/* 棋子层（绝对充满且居中） */}
                 {cell ? (
-                  <div className="w-[88%] h-[88%] pointer-events-none z-10">
-                    <Piece
-                      color={cell}
-                      liberties={showLiberties ? stoneLiberties : undefined}
-                      isLastMove={isLast}
-                    />
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                    <div className="w-[88%] h-[88%]">
+                      <Piece
+                        color={cell}
+                        liberties={showLiberties ? stoneLiberties : undefined}
+                        isLastMove={isLast}
+                      />
+                    </div>
                   </div>
                 ) : (
                   <>
-                    {/* 呼吸口小绿芽（透视镜开启） */}
+                    {/* 呼吸口小绿芽（绝对居中，绝不与其他元素并排挤占位置） */}
                     {showLiberties && isLibertySpot && !isHighlight && (
-                      <div className="z-10 pointer-events-none flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                         <div
-                          className={`rounded-full bg-emerald-400 border-2 border-white shadow pulse-liberty flex items-center justify-center ${
-                            size >= 9 ? 'w-2.5 h-2.5 text-[8px]' : 'w-3.5 h-3.5 sm:w-4 sm:h-4 text-[10px]'
+                          className={`rounded-full bg-emerald-400 border-2 border-white shadow-md pulse-liberty flex items-center justify-center ${
+                            size >= 9 ? 'w-3 h-3 text-[9px]' : size >= 7 ? 'w-4 h-4 text-[10px]' : 'w-5 h-5 text-xs'
                           }`}
                         >
                           🌱
@@ -183,9 +185,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       </div>
                     )}
 
-                    {/* 开局首步：天元手势 */}
+                    {/* 推荐落子提示发光星（绝对居中） */}
+                    {isHighlight && (
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                        <div className="w-8 h-8 rounded-full border-4 border-amber-400 bg-amber-300/60 animate-ping absolute" />
+                        <div className={`${size >= 9 ? 'text-lg' : 'text-2xl'} animate-bounce`}>⭐</div>
+                      </div>
+                    )}
+
+                    {/* 开局首步：天元手势指引（绝对居中上浮） */}
                     {isEmptyBoard && isCenter && !disabled && (
-                      <div className="z-20 pointer-events-none flex flex-col items-center justify-center animate-bounce -translate-y-1">
+                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 animate-bounce -translate-y-1">
                         <span className={size >= 9 ? 'text-base' : 'text-xl sm:text-2xl'}>👆</span>
                         <span
                           className={`bg-amber-400 text-amber-950 font-black rounded-full shadow-md whitespace-nowrap -mt-1 px-1.5 py-0.5 ${
@@ -197,18 +207,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       </div>
                     )}
 
-                    {/* 推荐落子提示发光星 */}
-                    {isHighlight && (
-                      <div className="z-20 pointer-events-none flex items-center justify-center">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-4 border-amber-400 bg-amber-300/60 animate-ping absolute" />
-                        <div className={`${size >= 9 ? 'text-lg' : 'text-2xl'} animate-bounce`}>⭐</div>
-                      </div>
-                    )}
-
-                    {/* 鼠标悬停半透明虚影（极大提升儿童点击准确率） */}
+                    {/* 鼠标悬停半透明虚影（绝对充满居中，不占物理流空间） */}
                     {!disabled && (
-                      <div className="w-[84%] h-[84%] opacity-0 group-hover:opacity-40 transition-opacity duration-150 pointer-events-none z-10">
-                        <Piece color={hoverColor} />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                        <div className="w-[84%] h-[84%] opacity-0 group-hover:opacity-40 transition-opacity duration-150">
+                          <Piece color={hoverColor} />
+                        </div>
                       </div>
                     )}
                   </>
