@@ -52,8 +52,8 @@ console.log('✅ 测试 4 通过：第 8 关【抱吃】验证成功');
 // 测试 5：第 9 关扭羊头·连环征子完整推演
 const lvl9 = LEVELS.find(l => l.id === 9)!;
 let b9 = lvl9.setup();
-// 步 1: 黑走 (1, 3) 拐弯打吃
-const m1 = playMove(b9, 1, 3, 'black');
+// 步 1: 黑走 (3, 2) 往下打吃
+const m1 = playMove(b9, 3, 2, 'black');
 assert(m1.valid, '征子步1黑落子有效');
 b9 = m1.newBoard;
 // 白兔挣扎逃一步到 (2, 3)
@@ -61,8 +61,8 @@ const w1 = playMove(b9, 2, 3, 'white');
 assert(w1.valid, '白兔逃跑有效');
 b9 = w1.newBoard;
 
-// 步 2: 黑走 (3, 4) 从侧面打吃
-const m2 = playMove(b9, 3, 4, 'black');
+// 步 2: 黑走 (2, 4) 盖帽打吃
+const m2 = playMove(b9, 2, 4, 'black');
 assert(m2.valid, '征子步2黑落子有效');
 b9 = m2.newBoard;
 // 白兔再次挣扎逃跑至 (3, 3)
@@ -70,7 +70,7 @@ const w2 = playMove(b9, 3, 3, 'white');
 assert(w2.valid, '白兔步2逃跑有效');
 b9 = w2.newBoard;
 
-// 步 3: 黑走 (4, 3) 一举提吃整串！
+// 步 3: 黑走 (4, 3) 迎头提吃整串！
 const m3 = playMove(b9, 4, 3, 'black');
 assert(m3.valid, '征子终极一步有效');
 assert(m3.captured.length === 3, `应一举提吃整串 3 颗白兔，实际提吃: ${m3.captured.length}`);

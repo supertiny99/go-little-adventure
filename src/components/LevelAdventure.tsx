@@ -95,9 +95,9 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
 
     // 关卡 9: 小羊扭头·连环征子 (Ladder 动态互动)
     if (level.id === 9) {
-      if (r === 1 && c === 3) {
-        setMessage('拐得漂亮！小白兔企图往右逃，快在侧面(3,4)反向打吃！');
-        voice.speak('拐得漂亮！快在侧面反向打吃！');
+      if (r === 3 && c === 2) {
+        setMessage('打得漂亮！小白兔企图往右逃，快在右边(2,4)盖帽打吃！');
+        voice.speak('打得漂亮！快在右边盖帽打吃！');
         setIsAiThinking(true);
         setTimeout(() => {
           const aiRes = playMove(newBoard, 2, 3, 'white');
@@ -109,7 +109,7 @@ export const LevelAdventure: React.FC<LevelAdventureProps> = ({
           setIsAiThinking(false);
         }, 500);
         return;
-      } else if (r === 3 && c === 4) {
+      } else if (r === 2 && c === 4) {
         setMessage('太绝啦！小羊扭头走投无路，下在(4,3)把它一网打尽！');
         voice.speak('太绝啦！最后一步把它一网打尽！');
         setIsAiThinking(true);
