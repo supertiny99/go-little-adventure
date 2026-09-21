@@ -17,7 +17,6 @@ import {
   RotateCcw,
   Undo2,
   Trophy,
-  Bot,
   User,
   Lightbulb,
   Play,
@@ -69,7 +68,9 @@ export const AiBattleView: React.FC = () => {
       const welcome =
         diff === 'easy'
           ? '喵~ 你是黑小猫，你先走第一步哦！'
-          : '狐狸准备好啦，小主人请执黑先下！';
+          : diff === 'medium'
+          ? '狐狸准备好啦，小主人请执黑先下！'
+          : '神龙出关！看看谁才是真正的围棋小萌主！';
       setAiSpeech(welcome);
       voice.speak(welcome);
     } else {
@@ -272,22 +273,22 @@ export const AiBattleView: React.FC = () => {
             <div className="text-xs font-extrabold text-amber-900 mb-2 flex items-center gap-1">
               <span>🐾 选择你的萌宠小伙伴：</span>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <button
                 onClick={() => {
                   sounds.playClick();
                   setDifficulty('easy');
                 }}
-                className={`p-3 rounded-2xl border-2 transition-all flex items-center gap-3 ${
+                className={`p-2.5 rounded-2xl border-2 transition-all flex items-center sm:flex-col sm:justify-center gap-2 text-left sm:text-center ${
                   difficulty === 'easy'
                     ? 'bg-emerald-300 border-emerald-500 text-emerald-950 shadow-md font-black'
                     : 'bg-white/80 border-amber-200 text-amber-900 hover:bg-emerald-100/50'
                 }`}
               >
                 <span className="text-3xl">🐱</span>
-                <div className="text-left">
-                  <div className="text-sm sm:text-base font-black">呆萌猫猫</div>
-                  <div className="text-[11px] text-emerald-800">初学首选·经常放水</div>
+                <div>
+                  <div className="text-sm font-black">呆萌猫猫</div>
+                  <div className="text-[10px] text-emerald-800">初学首选·经常放水</div>
                 </div>
               </button>
 
@@ -296,16 +297,34 @@ export const AiBattleView: React.FC = () => {
                   sounds.playClick();
                   setDifficulty('medium');
                 }}
-                className={`p-3 rounded-2xl border-2 transition-all flex items-center gap-3 ${
+                className={`p-2.5 rounded-2xl border-2 transition-all flex items-center sm:flex-col sm:justify-center gap-2 text-left sm:text-center ${
                   difficulty === 'medium'
                     ? 'bg-indigo-300 border-indigo-500 text-indigo-950 shadow-md font-black'
                     : 'bg-white/80 border-amber-200 text-amber-900 hover:bg-indigo-100/50'
                 }`}
               >
                 <span className="text-3xl">🦊</span>
-                <div className="text-left">
-                  <div className="text-sm sm:text-base font-black">机灵小狐</div>
-                  <div className="text-[11px] text-indigo-800">会主动吃子和逃跑</div>
+                <div>
+                  <div className="text-sm font-black">机灵小狐</div>
+                  <div className="text-[10px] text-indigo-800">避开送死·攻守兼备</div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  sounds.playClick();
+                  setDifficulty('hard');
+                }}
+                className={`p-2.5 rounded-2xl border-2 transition-all flex items-center sm:flex-col sm:justify-center gap-2 text-left sm:text-center ${
+                  difficulty === 'hard'
+                    ? 'bg-rose-300 border-rose-500 text-rose-950 shadow-md font-black'
+                    : 'bg-white/80 border-amber-200 text-amber-900 hover:bg-rose-100/50'
+                }`}
+              >
+                <span className="text-3xl">🐲</span>
+                <div>
+                  <div className="text-sm font-black">功夫小龙</div>
+                  <div className="text-[10px] text-rose-800">高瞻远瞩·绝不留情</div>
                 </div>
               </button>
             </div>
@@ -416,12 +435,12 @@ export const AiBattleView: React.FC = () => {
 
             {/* AI萌宠 */}
             <div className="flex items-center gap-2 flex-row-reverse">
-              <div className="w-10 h-10 rounded-2xl bg-white text-slate-800 border-2 border-slate-300 flex items-center justify-center font-bold text-lg shadow">
-                <Bot size={20} className="text-orange-500" />
+              <div className="w-10 h-10 rounded-2xl bg-white text-slate-800 border-2 border-slate-300 flex items-center justify-center font-bold text-xl shadow">
+                {difficulty === 'easy' ? '🐱' : difficulty === 'medium' ? '🦊' : '🐲'}
               </div>
               <div className="text-right">
                 <div className="text-xs font-bold text-amber-900">
-                  {difficulty === 'easy' ? '呆萌猫' : '机灵狐'}
+                  {difficulty === 'easy' ? '呆萌猫' : difficulty === 'medium' ? '机灵狐' : '功夫龙'}
                 </div>
                 <div className="text-sm font-black text-rose-700">
                   抓到: {aiCaptures} / {targetWinCaptures}

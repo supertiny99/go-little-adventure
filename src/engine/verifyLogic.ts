@@ -66,4 +66,32 @@ const res10 = playMove(b10, 1, 1, 'black');
 assert(res10.valid && res10.captured.length === 1, '反提应吃掉白兔');
 console.log('✅ 测试 6 通过：第 10 关【反提救猫】验证成功');
 
-console.log('🎉 全部 12 个关卡核心吃子手筋严格逻辑验证通过！');
+// 测试 7：AI 智能决策测试 - 绝不盲目落入虎口送死
+import { getAiMove } from './ai';
+const bTiger = createEmptyBoard(5);
+// 黑棋摆出三面虎口，留 (1,1) 一处陷阱
+bTiger[0][1] = 'black';
+bTiger[1][0] = 'black';
+bTiger[2][1] = 'black';
+// 此时若白棋在 (1,1) 盲目落子，直接处于只剩 1 口气（即 (1,2)）的极度危险中
+const aiDecision = getAiMove(bTiger, 'white', 'medium');
+assert(
+  aiDecision.point !== null && !(aiDecision.point.r === 1 && aiDecision.point.c === 1),
+  'AI 应聪明避开自投虎口的 (1,1) 陷阱'
+);
+console.log('✅ 测试 7 通过：轻量增强 AI 成功识破陷阱，避开盲目送死！');
+
+// 测试 8：AI 智能决策测试 - 抓住 100% 提子机会
+const bCap = createEmptyBoard(5);
+bCap[1][1] = 'black'; // 黑子只剩 (1,2) 一口气
+bCap[0][1] = 'white';
+bCap[2][1] = 'white';
+bCap[1][0] = 'white';
+const aiCapDecision = getAiMove(bCap, 'white', 'medium');
+assert(
+  aiCapDecision.point?.r === 1 && aiCapDecision.point?.c === 2,
+  'AI 应精准落在 (1,2) 提掉濒危黑子'
+);
+console.log('✅ 测试 8 通过：AI 精准锁定叫吃提子要点！');
+
+console.log('🎉 全部 12 个关卡与轻量增强 AI 决策引擎 100% 验证通过！');
